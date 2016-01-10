@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iris-polymer-importer/iris-importer.html">
+
+<link rel="import" href="http-scripts.html">
+
+<dom-module id="iris-http-connection">
+  <template>
+  </template>
+  <script>
+    'use strict'
+
+    let method = {
+      name: "http",
+      request: function(uri, data) {
+
+      },
+      subscribe: function(uri, callback) {
+
+      },
+      unsubscribe: function(uri, callback) {
+
+      }
+    };
+
+    (function() {
+      Polymer({
+        is: 'iris-http-connection',
+        properties: {},
+        getMethod() {
+          return method;
+        }
+      });
+    })();
+  </script>
+</dom-module>

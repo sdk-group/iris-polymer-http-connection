@@ -1,0 +1,93 @@
+<script>
+  var mock_request = function(uri, data) {
+    data = data || {};
+    var requests = {
+      '/login': {
+        token: 131443
+      },
+      '/userinfo': {
+        name: 'Ивана',
+        lastname: 'Иванова',
+        id: 123,
+        workstations: {
+          'control-panel': {
+            1: {
+              label: 'Окно 1'
+            },
+            2: {
+              label: 'Окно 2'
+            },
+            3: {
+              label: 'Окно 378888888888888888888'
+            }
+          }
+        }
+      }
+    };
+
+    return requests[uri]
+  };
+
+  var callbacks = {};
+
+  var mock_subscribe = function(uri, callback) {
+    callbacks[uri] = callbacks[uri] || [];
+    callbacks[uri].push(callback);
+  };
+
+  var queue_update_test_data = {
+    live: {
+      tickets: [{
+        ticket_id: 1000,
+        label: "П-1",
+        service: "Test service",
+        service_count: 1,
+        state: 'open',
+        client: {
+          name: 'My',
+          lastname: 'Lastname'
+        },
+        time_bounds: {
+          start: Date.now() - 30 * 1000
+        }
+      }, {
+        ticket_id: 1001,
+        label: "П-2",
+        service: "Test service",
+        service_count: 1,
+        state: 'open',
+        client: {
+          name: 'My',
+          lastname: 'Lastname'
+        },
+        time_bounds: {
+          start: Date.now() - 30 * 1000
+        }
+      }, {
+        ticket_id: 1100,
+        label: "П-3",
+        service: "Test service",
+        service_count: 1,
+        state: 'open',
+        client: {
+          name: 'My',
+          lastname: 'Lastname'
+        },
+        time_bounds: {
+          start: Date.now() - 30 * 1000
+        }
+      }],
+      count: 0
+    },
+    postponed: {
+      tickets: [],
+      count: 0
+    }
+  };
+
+  setInterval(function() {
+    queue_update_test_data.live.count = parseInt(Math.random() * 100);
+    queue_update_test_data.postponed.count = parseInt(Math.random() * 100);
+    _.forEach(callbacks['listen://queue/update'], cb => cb(queue_update_test_data));
+  }, 2000);
+</script>
