@@ -1,33 +1,56 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iris-polymer-importer/iris-importer.html">
-
-<link rel="import" href="http-scripts.html">
+<link rel="import" href="../../bower_components/iris-polymer-settings-panel/iris-settings-access.html">
 
 <dom-module id="iris-http-connection">
   <template>
+    <iris-settings-access id="settings"></iris-settings-access>
   </template>
   <script>
-    'use strict'
-
-    let method = {
-      name: "http",
-      request: function(uri, data) {
-
-      },
-      subscribe: function(uri, callback) {
-
-      },
-      unsubscribe: function(uri, callback) {
-
-      }
-    };
-
     (function() {
+      'use strict'
+
+      function HttpConnectionMethod(server, port) {
+        let headers = new Headers({
+          'Content-Type': 'application/json'
+        });
+
+        return {
+          name: "http",
+          auth: function() {
+            return Promise.resolve(true)
+          },
+          request: function(uri, data) {
+            let options = {
+              method: 'POST',
+              body: JSON.stringify(data),
+              headers: headers
+            };
+            let url = (server ? server : '') + (port ? ':' + port : '') + uri;
+            return fetch(url, options)
+              .then((d) => d.json())
+          },
+          subscribe: function(uri, callback) {
+            throw new Error('not implemented yet')
+          },
+          unsubscribe: function(uri, callback) {
+            throw new Error('not implemented yet')
+          }
+        }
+      };
+
+
       Polymer({
         is: 'iris-http-connection',
         properties: {},
+        ready() {
+          let port = this.$.settings.getItem('api_port');
+          let server = this.$.settings.getItem('api_server');
+
+          this.method = new HttpConnectionMethod(server, port)
+        },
         getMethod() {
-          return method;
+          return this.method;
         }
       });
     })();
