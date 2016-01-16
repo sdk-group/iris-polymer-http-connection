@@ -20,6 +20,9 @@
           auth: function() {
             return Promise.resolve(true)
           },
+          close: function() {
+            return Promise.resolve(true)
+          },
           request: function(uri, data) {
             let options = {
               method: 'POST',
