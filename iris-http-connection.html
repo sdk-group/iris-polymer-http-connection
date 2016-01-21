@@ -46,14 +46,13 @@
 
       Polymer({
         is: 'iris-http-connection',
-        properties: {},
-        ready() {
+        getMethod() {
+          if (this.method) return this.method;
+
           let port = this.$.settings.getItem('api_port');
           let server = this.$.settings.getItem('api_server');
-
           this.method = new HttpConnectionMethod(server, port)
-        },
-        getMethod() {
+
           return this.method;
         }
       });
