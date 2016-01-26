@@ -1,10 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iris-polymer-importer/iris-importer.html">
-<link rel="import" href="../../bower_components/iris-polymer-settings-panel/iris-settings-access.html">
 
 <dom-module id="iris-http-connection">
   <template>
-    <iris-settings-access id="settings"></iris-settings-access>
   </template>
   <script>
     (function() {
@@ -46,11 +44,9 @@
 
       Polymer({
         is: 'iris-http-connection',
-        getMethod() {
+        getMethod(server, port) {
           if (this.method) return this.method;
 
-          let port = this.$.settings.getItem('api_port');
-          let server = this.$.settings.getItem('api_server');
           this.method = new HttpConnectionMethod(server, port)
 
           return this.method;
