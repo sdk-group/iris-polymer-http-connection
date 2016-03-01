@@ -30,7 +30,9 @@
             };
             let url = (server ? server : '') + (port ? ':' + port : '') + uri;
             return fetch(url, options)
-              .then((d) => d.json())
+              .then((d) => d.json()).catch((r) => {
+                throw new Error('failed to fetch')
+              })
           },
           subscribe: function(uri, callback) {
             throw new Error('not implemented yet')
