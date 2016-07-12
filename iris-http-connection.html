@@ -16,13 +16,16 @@
 
         return {
           name: "http",
-          auth: function() {
+          auth: function(token) {
+            this.token = token;
             return Promise.resolve(true)
           },
           close: function() {
             return Promise.resolve(true)
           },
           request: function(uri, data) {
+            data = data || {};
+            data.token = this.token;
             let options = {
               method: 'POST',
               body: JSON.stringify(data),
@@ -30,7 +33,12 @@
             };
             let url = (server ? server : '') + (port ? ':' + port : '') + uri;
             return fetch(url, options)
-              .then((d) => d.json()).catch((r) => {
+              .then((d) => d.json())
+              // .then(response => {
+              //   if (response.state == false) return new Error('failed to fetch:' + response.reason)
+              //   return response.value;
+              // })
+              .catch((r) => {
                 throw new Error('failed to fetch')
               })
           },
