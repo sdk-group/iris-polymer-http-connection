@@ -2,62 +2,14 @@
 <link rel="import" href="../../bower_components/iris-polymer-importer/iris-importer.html">
 
 <dom-module id="iris-http-connection">
-  <template>
-  </template>
+  <template></template>
   <script>
-    (function() {
+    (function () {
       'use strict'
-
-      function HttpConnectionMethod(server, port) {
-        let headers = new Headers({
-          'Content-Type': 'application/json'
-        });
-        if (server.indexOf('http') !== 0) server = 'http://' + server;
-
-        return {
-          name: "http",
-          auth: function(token) {
-            this.token = token;
-            return Promise.resolve(true)
-          },
-          close: function() {
-            return Promise.resolve(true)
-          },
-          request: function(uri, data) {
-            data = data || {};
-            data.token = this.token;
-            let options = {
-              method: 'POST',
-              body: JSON.stringify(data),
-              headers: headers
-            };
-            let url = (server ? server : '') + (port ? ':' + port : '') + uri;
-            return fetch(url, options)
-              .then((d) => d.json())
-              // .then(response => {
-              //   if (response.state == false) return new Error('failed to fetch:' + response.reason)
-              //   return response.value;
-              // })
-              .catch((r) => {
-                throw new Error('failed to fetch')
-              })
-          },
-          subscribe: function(uri, callback) {
-            throw new Error('not implemented yet')
-          },
-          unsubscribe: function(uri, callback) {
-            throw new Error('not implemented yet')
-          }
-        }
-      };
-
-
       Polymer({
         is: 'iris-http-connection',
         getMethod(server, port) {
-          if (this.method) return this.method;
-
-          this.method = new HttpConnectionMethod(server, port)
+          this.method = this.method || (new IRIS.HttpConnectionMethod(server, port));
 
           return this.method;
         }
